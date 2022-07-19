@@ -1,6 +1,9 @@
 import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Home } from "./components/Home";
+import { ProductList } from "./components/product/ProductList";
+import { ProductForm } from "./components/product/ProductForm";
+import { ProductCard } from "./components/product/ProductCard";
 
 const title = "Farming Production";
 const description = "Aplicación web para el control de productos agricolas";
@@ -10,7 +13,7 @@ const App: React.FC = () => {
     <div>
       <nav className="navbar navbar-expand navbar-dark bg-dark">        
         <Link to={"/"}  className="navbar-brand">
-          NRC 6515
+          FARMING
         </Link>
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
@@ -22,7 +25,11 @@ const App: React.FC = () => {
       </nav>
       <div className="container mt-3">
         <Routes>
-          <Route path="/" element={<Home title={title} description={description} />} />          
+          <Route path="/" element={<Home title={title} description={description} />} /> 
+          <Route path="/exams" element={<ProductList />} />          
+          <Route path="/exams/create" element={<ProductForm />} />    
+          <Route path="/exams/retrieve/:id" element={<ProductCard/>} />      
+          <Route path="/exams/update/:id" element={<ProductForm />} />          
         </Routes>
       </div>
     </div>
