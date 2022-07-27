@@ -1,13 +1,16 @@
 import { FaPen, FaEye, FaTrash, FaPlus } from "react-icons/fa";
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import IProductModel from "../../models/Product";
 import ProductService from "../../services/ProductServices";
 import Swal from "sweetalert2";
 import ReactPaginate from "react-paginate";
+import { render } from "react-dom";
 
 export const ProductList = () => {
     
+  let navigate = useNavigate();
+
     //Hook: Define un atributo y la función que lo va a actualizar
     const [products, setProducts] = useState<Array<IProductModel>>([]);
     const [itemsCount, setItemsCount] = useState<number>(0);
@@ -29,7 +32,7 @@ const listProducts = (page: number, size: number) => {
   ProductService.list(page, size)
     .then((response: any) => {
       setProducts(response.data); //Víncula el resultado del servicio con la función del Hook useState
-      console.log(response.data);
+      console.log("Esto es de listProducts", response.data);
     })
     .catch((e: Error) => {
       console.log(e);
@@ -60,6 +63,7 @@ const removeExam = (id: number) => {
            .then((response: any) => {
              listProducts(0,itemsPerPage);
              console.log(response.data);
+             navigate("/products");
            })
            .catch((e: Error) => {
              console.log(e);
@@ -69,7 +73,10 @@ const removeExam = (id: number) => {
      });        
 };
 
+
+
 return ( 
+  
    <div className='list row'>
        <h1>Hay {itemsCount} productos</h1>
        <div className='col-md-12'>
@@ -80,11 +87,15 @@ return (
                        <th>Título</th>
                        <th>Descripción</th>
                        <th>Categorias</th>
-                       <th>Amount</th>
+                       <th>Cantidad</th>
                        <th>
-                         <Link to={"/product/create"} className="btn btn-success">
+                         <Link to={"/products/create"} className="btn btn-success">
                              <FaPlus /> Agregar
                          </Link>
+                       </th>
+                       <th>
+                     
+
                        </th>
                    </tr>
                </thead>
@@ -99,10 +110,10 @@ return (
                            <td>
                    
                            <div className="btn-group" role="group">
-                           <Link to={"/product/retrieve/" + Product.id} className="btn btn-warning">
+                           <Link to={"/products/retrieve/" + Product.id} className="btn btn-warning">
                                <FaEye /> Ver
                              </Link>                                  
-                             <Link to={"/product/update/" + Product.id} className="btn btn-primary">
+                             <Link to={"/products/update/" + Product.id} className="btn btn-primary">
                                  <FaPen /> Editar
                              </Link>
 
@@ -119,12 +130,13 @@ return (
                </tbody>
            </table>
 
+
            <ReactPaginate
              className="pagination"
              breakLabel="..."
              nextLabel="siguiente >"
              onPageChange={handlePageClick}
-             pageRangeDisplayed={5}
+             pageRangeDisplayed={10}
              pageCount={pageCount}
              previousLabel="< anterior"/>
 

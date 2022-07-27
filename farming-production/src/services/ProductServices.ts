@@ -2,10 +2,11 @@ import Swal from 'sweetalert2';
 import http from '../http-common';
 import IProductData from '../models/Product';
 
+
  /* ================ CREATE ================ */
 const create = async (data: IProductData) => {    
     try {
-      const response = await http.post<IProductData>("/product", data);
+      const response = await http.post<IProductData>("/products", data);
       if(response.status === 201){
         Swal.fire({
           icon: 'success',
@@ -29,13 +30,13 @@ const create = async (data: IProductData) => {
 
  /* ================ RETRIEVE ================ */
 const retrieve = async (id: number) => {
-  return http.get<IProductData>(`/product/${id}`);
+  return http.get<IProductData>(`/products/${id}`);
 };
 
  /* ================ UPDATE ================ */
 const update = async (data: IProductData) => {
   try {    
-    const response = await http.put<IProductData>(`/product/${data.id}`, data);
+    const response = await http.put<IProductData>(`/products/${data.id}`, data);
     if(response.status === 200){
       Swal.fire({
         icon: 'success',
@@ -58,7 +59,7 @@ const update = async (data: IProductData) => {
  /* ================ DELETE ================ */
 const remove = async (id: number) => {
     try {
-      const response = await  http.delete<string>(`/product/${id}`);
+      const response = await  http.delete<string>(`/products/${id}`);
       if(response.status === 200){
         Swal.fire({
           icon: 'success',
@@ -66,7 +67,7 @@ const remove = async (id: number) => {
           text: 'El producto ha sido eliminado',
           confirmButtonText: 'Aceptar'    
         });
-      }
+    }
     } catch (error) {
       Swal.fire({
       icon: 'error',
@@ -79,13 +80,13 @@ const remove = async (id: number) => {
 
  /* ================ LIST ================ */ 
  const list = (page: number, size: number, sort? : String) => {
-  const urlRequest : string = "/product/" + page + "/" + size ;
+  const urlRequest : string = "/products/" + page + "/" + size ;
   console.log(urlRequest);
   return http.get<Array<IProductData>>(urlRequest);
 };
 
 const count = async () =>  {  
-  const response = await http.get<number>("/product/count");
+  const response = await http.get<number>("/products/count");
   return response.data;
 };
 

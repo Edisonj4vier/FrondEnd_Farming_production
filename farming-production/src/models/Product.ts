@@ -1,4 +1,3 @@
-
 export default interface IProductModel {
     id?: number | null,
     name : string,

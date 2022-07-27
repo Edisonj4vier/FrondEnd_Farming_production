@@ -17,7 +17,7 @@ const App: React.FC = () => {
         </Link>
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
-            <Link to={"/exams"} className="nav-link">
+            <Link to={"/products"} className="nav-link">
               Productos
             </Link>
           </li>          
@@ -26,10 +26,10 @@ const App: React.FC = () => {
       <div className="container mt-3">
         <Routes>
           <Route path="/" element={<Home title={title} description={description} />} /> 
-          <Route path="/exams" element={<ProductList />} />          
-          <Route path="/exams/create" element={<ProductForm />} />    
-          <Route path="/exams/retrieve/:id" element={<ProductCard/>} />      
-          <Route path="/exams/update/:id" element={<ProductForm />} />          
+          <Route path="/products" element={<ProductList />} />          
+          <Route path="/products/create" element={<ProductForm />} />    
+          <Route path="/products/retrieve/:id" element={<ProductCard/>} />      
+          <Route path="/products/update/:id" element={<ProductForm />} />          
         </Routes>
       </div>
     </div>

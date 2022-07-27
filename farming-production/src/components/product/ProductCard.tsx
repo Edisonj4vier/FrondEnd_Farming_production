@@ -37,7 +37,7 @@ export const ProductCard = () => {
           <p>{product.amount}</p>
           <br />
 							<div className="btn-group" role="group">								
-                <Link to={"/product"} className="btn btn-primary">
+                <Link to={"/products"} className="btn btn-primary">
                     <FaArrowLeft /> Volver
                 </Link>
 								<button type="button" className="btn btn-danger">

@@ -27,17 +27,13 @@ export const ProductForm = () => {
         setProduct({ ...product, [name]: value });
     };
 
-		const handleTextAreaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-			const { name, value } = event.target;
-			setProduct({ ...product, [name]: value });
-	};
 
     const saveProduct = () => {        
       if(product.id !== null)
       {
         ProductService.update(product)
         .then((response: any) => {
-          navigate("/product");
+          navigate("/products");
           console.log(response.data);
         })
         .catch((e: Error) => {
@@ -48,7 +44,7 @@ export const ProductForm = () => {
       {
 			  ProductService.create(product)
           .then((response: any) => {    
-            navigate("/product");
+            navigate("/products");
             console.log(response.data);
           })
           .catch((e: Error) => {
@@ -127,7 +123,7 @@ export const ProductForm = () => {
             />
 						<br />
 							<div className="btn-group" role="group">								
-                <Link to={"/exams"} className="btn btn-primary">
+                <Link to={"/products"} className="btn btn-primary">
                     <FaArrowLeft /> Volver
                 </Link>
 								<button type="button" onClick={saveProduct} className="btn btn-success">
