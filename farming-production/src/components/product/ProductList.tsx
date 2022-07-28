@@ -4,8 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import IProductModel from "../../models/Product";
 import ProductService from "../../services/ProductServices";
 import Swal from "sweetalert2";
-import ReactPaginate from "react-paginate";
-import { render } from "react-dom";
 
 export const ProductList = () => {
     
@@ -16,6 +14,8 @@ export const ProductList = () => {
     const [itemsCount, setItemsCount] = useState<number>(0);
     const [pageCount, setPageCount] = useState(0);
     const [itemsPerPage, setItemsPerPage] = useState(5);
+
+
     //Hook para llamar a la Web API
     useEffect(() => {
         getItems();  
@@ -130,17 +130,8 @@ return (
                </tbody>
            </table>
 
+       </div>  
 
-           <ReactPaginate
-             className="pagination"
-             breakLabel="..."
-             nextLabel="siguiente >"
-             onPageChange={handlePageClick}
-             pageRangeDisplayed={10}
-             pageCount={pageCount}
-             previousLabel="< anterior"/>
-
-       </div>            
    </div>
 );
 
