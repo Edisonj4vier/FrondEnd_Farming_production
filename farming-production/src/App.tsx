@@ -5,6 +5,8 @@ import { ProductList } from "./components/product/ProductList";
 import { ProductForm } from "./components/product/ProductForm";
 import { ProductCard } from "./components/product/ProductCard";
 
+import {MaintenanceForm} from './components/maintenances/product/MaintenanceForm'
+
 const title = "Farming Production";
 const description = "Aplicación web para el control de productos agricolas";
 
@@ -25,11 +27,20 @@ const App: React.FC = () => {
       </nav>
       <div className="container mt-3">
         <Routes>
-          <Route path="/" element={<Home title={title} description={description} />} /> 
+          <Route path="/" element={<Home title={title} description={description} />} />
+          {/* Rutas de products */} 
           <Route path="/products" element={<ProductList />} />          
           <Route path="/products/create" element={<ProductForm />} />    
           <Route path="/products/retrieve/:id" element={<ProductCard/>} />      
-          <Route path="/products/update/:id" element={<ProductForm />} />          
+          <Route path="/products/update/:id" element={<ProductForm />} /> 
+
+          {/* Rutas de products */} 
+          <Route path="/products/maintenance/create" element={<MaintenanceForm />} />    
+          <Route path="/products/retrieve/:id" element={<ProductCard/>} />      
+          <Route path="/products/maintenance/update/:id" element={<MaintenanceForm />} />    
+          
+          
+
         </Routes>
       </div>
     </div>
