@@ -8,8 +8,6 @@ import { MaintenenceLsit } from "./components/maintenence/MaintenenceList";
 import { MaintenenceForm } from "./components/maintenence/MaintenenceForm";
 import { MaintenenceCard } from "./components/maintenence/MaintenenceCard";
 
-import {MaintenanceForm} from './components/maintenances/product/MaintenanceForm'
-
 const title = "Farming Production";
 const description = "Aplicación web para el control de productos agricolas";
 
@@ -28,7 +26,7 @@ const App: React.FC = () => {
           </li>    
           <Link to={"/maintenance"} className="nav-link">
               Mantenimientos
-            </Link>     
+            </Link>
         </div>
       </nav>
       <div className="container mt-3">

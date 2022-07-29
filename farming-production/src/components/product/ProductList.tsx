@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import IProductModel from "../../models/Product";
 import ProductService from "../../services/ProductServices";
 import Swal from "sweetalert2";
+import ReactPaginate from "react-paginate";
 
 export const ProductList = () => {
     
@@ -74,7 +75,6 @@ const removeExam = (id: number) => {
 };
 
 
-
 return ( 
   
    <div className='list row'>
@@ -129,7 +129,6 @@ return (
                    ))}
                </tbody>
            </table>
-<<<<<<< HEAD
            
            <ReactPaginate
              className="pagination justify-content-center card-footer"
@@ -140,14 +139,8 @@ return (
              pageCount={pageCount}
              previousLabel="< anterior"/>
        </div>            
-=======
-
-       </div>  
-
->>>>>>> 51fe4587ff3e2e71effbb9aad1ffc2101d43c364
    </div>
 );
 
 }
-
 
