@@ -129,17 +129,15 @@ return (
                    ))}
                </tbody>
            </table>
-
-
+           
            <ReactPaginate
-             className="pagination"
+             className="pagination justify-content-center card-footer"
              breakLabel="..."
              nextLabel="siguiente >"
              onPageChange={handlePageClick}
-             pageRangeDisplayed={10}
+             pageRangeDisplayed={5}
              pageCount={pageCount}
              previousLabel="< anterior"/>
-
        </div>            
    </div>
 );
