@@ -7,103 +7,84 @@ import MaintenanceService from "../../../services/MaintenanceServices";
 import ProductService from "../../../services/ProductServices";
 
 export const MaintenanceForm = () => {
-	
-  //Obtener producto IdProduct 
 
-  const { idProduct}= useParams();
-  const [product, setProduct] = useState<IProductModel>();
-  useEffect(() => {
-    if (idProduct)
-      getProduct(idProduct);
-  }, [idProduct]);
+  const { id, idProduct }= useParams();
+  let navigate = useNavigate();
 
 
-  const getProduct = (id: any) => {
-    ProductService.retrieve(id)
+//Model vacío
+const initialQuestionModel : IMaintenanceModel = {
+    id: null,
+    name: "",
+    description: "", 
+    amount : "" , 
+    date: "",  
+    state : "", 
+    product : null    
+};
+
+//Hooks para gestionar el modelo
+const [maintenance, setMaintenance] = useState<IMaintenanceModel>(initialQuestionModel);
+const [product, setProduct] = useState<IProductModel>();
+
+//Escucha los cambios en cada control Input y los asigna a los valores del Modelo
+const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setMaintenance({ ...maintenance, [name]: value });
+};
+
+useEffect(() => {
+  if (idProduct)
+  getProduct(idProduct);
+});
+
+const getProduct = (id: any) => {
+  ProductService.retrieve(id)
+    .then((response: any) => {
+      setProduct(response.data); //Víncula el resultado del servicio con la función del Hook useState
+      maintenance.product = product!;
+      console.log(response.data);
+    })
+    .catch((e: Error) => {
+      console.log(e);
+    });
+};
+
+const saveMaintenance = () => {        
+    if(maintenance.id !== null)
+    {
+      /*QuestionService.update(exam)
       .then((response: any) => {
-        setProduct(response.data); //Víncula el resultado del servicio con la función del Hook useState
+        navigate("/exams");
         console.log(response.data);
       })
       .catch((e: Error) => {
         console.log(e);
-      });
- };
-
-  const { id }= useParams();
-  let navigate = useNavigate();
-
-    //Model vacío
-    const initialMaintenanceModel : IMaintenanceModel = {
-        id: null,
-        name : "",
-        description : "",
-        date : "",
-        amount : "", 
-        state  : ""   
-    };
-
-    //Hooks para gestionar el modelo
-    const [maintenance, setMaintenance] = useState<IMaintenanceModel>(initialMaintenanceModel);
-
-
-    //Escucha los cambios en cada control Input y los asigna a los valores del Modelo
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setMaintenance({ ...maintenance, [name]: value });
-    };
-
-
-    const saveProduct = (idProduct : any ) => {        
-   /*    if(maintenance.id !== null)
-      {
-        MaintenanceService.update(idProduct, maintenance)
-        .then((response: any) => {
+      });*/
+    }
+    else
+    {
+        MaintenanceService.create(maintenance)
+        .then((response: any) => {    
           navigate("/products");
           console.log(response.data);
         })
         .catch((e: Error) => {
           console.log(e);
         });
-      }
-      else
-      { */
-			  MaintenanceService.create(idProduct , maintenance)
-          .then((response: any) => {    
-            navigate("/products");
-            console.log(response.data);
-          })
-          .catch((e: Error) => {
-            console.log(e);
-          });
-    };
+    }
+  };
 
-    useEffect(() => {
-      if (id)
-      getMaintenance(idProduct , id);
-    }, [id]);
-
-
-    const getMaintenance = (idProduct : any  , id: any) => {
-      MaintenanceService.retrieve(idProduct ,id)
-        .then((response: any) => {
-          setMaintenance(response.data); //Víncula el resultado del servicio con la función del Hook useState
-          console.log(response.data);
-        })
-        .catch((e: Error) => {
-          console.log(e);
-        });
-   };
-
-
-		return ( //JSX
-			<div className="submit-form">				
-					<div>
-						{ maintenance.id !== null ? (<h1>Actualizado mantenimiento {maintenance.name}</h1>) : (<h1>Registro de mantenimiento</h1>) }            
+return ( //JSX
+	<div className="submit-form">				
+		<div>
+				{ maintenance.id !== null ? (<h1>Actualizado la pregunta {maintenance.name}</h1>) : (<h1>Registro de nueva pregunta</h1>) }            
+        { product ? (<h3>{product.name} </h3>) : (<h3>N/A</h3>) }
 						<div className="form-group">
-						<label htmlFor="name">Name</label>
+						<label htmlFor="title">Título</label>
             <input
               type="text"
-							placeholder="Ingrese el nombre del producto"
+							placeholder="Ingrese el nombre de la pregunta"
               className="form-control"
               id="name"
               required
@@ -113,44 +94,32 @@ export const MaintenanceForm = () => {
             />
 						<label htmlFor="description">Descripción</label>
             <input						
-              type="date"
+              type="text"
               className="form-control"
-							placeholder="Ingrese la descripción del producto"
+							placeholder="Ingrese la descripción del examen"
+              id="description"
+              required
+              value={maintenance.description}
+              onChange={handleInputChange}
+              name="description"
+            />
+						<label htmlFor="timeLimit">Puntaje</label>
+            <input						
+              type="text"
+              className="form-control"
               id="date"
               required
               value={maintenance.date}
               onChange={handleInputChange}
               name="date"
             />
-                        <label htmlFor="category">Cantidad</label>
-            <input						
-              type="text"
-              className="form-control"
-							placeholder="Ingrese la cantidad del producto"
-              id="amount"
-              required
-              value={maintenance.amount}
-              onChange={handleInputChange}
-              name="amount"
-            />
-		
-						<label htmlFor="amount">Estado</label>
-            <input						
-              type="text"
-              className="form-control"
-							placeholder="Ingrese la cantidad del producto"
-              id="state"
-              required
-              value={maintenance.state}
-              onChange={handleInputChange}
-              name="state"
-            />
+			
 						<br />
 							<div className="btn-group" role="group">								
-                <Link to={"/products/retrieve/" +idProduct} className="btn btn-primary">
+                <Link to={"/products"} className="btn btn-primary">
                     <FaArrowLeft /> Volver
                 </Link>
-								<button type="button" onClick={saveProduct} className="btn btn-success">
+								<button type="button" onClick={saveMaintenance} className="btn btn-success">
                   <FaSave />Guardar
                 </button>
 							</div>
@@ -158,5 +127,4 @@ export const MaintenanceForm = () => {
 					</div>				
 			</div>        
     );
-
 }

@@ -1,48 +1,44 @@
-import Swal from 'sweetalert2';
-import http from '../http-common';
-import IMaintenanceModel from '../models/Maintenance';
-import IMaintenanceData from '../models/Product';
+import Swal from "sweetalert2";
+import http from "../http-common";
+import IMaintenanceModel from "../models/Maintenance";
 
-
- /* ================ CREATE ================ */
-const create = async (idProduct : string, data: IMaintenanceModel) => {    
-    try {
-      const response = await http.post<IMaintenanceData>(`${idProduct}/maintenances`, data);
-      if(response.status === 201){
-        Swal.fire({
-          icon: 'success',
-          title: 'Correcto',
-          text: 'El producto ha sido creado correctamente',
-          confirmButtonText: 'Aceptar'    
-  
-        });
-      }
-      console.log(response);
-    } catch (err) {
-      console.log(err);
+const create = async (data: IMaintenanceModel) => {    
+  try {
+    const url : string = "/products/" + data.product!.id + "/maintenances";
+    const response = await http.post<IMaintenanceModel>(url, data);
+    if(response.status === 201){
       Swal.fire({
-        icon: 'error',
-        title: '¡Error!',
-        text: 'Network Error',
+        icon: 'success',
+        title: 'Correcto',
+        text: 'Mantenimiento creado correctamente',
         confirmButtonText: 'Aceptar'    
+
       });
     }
-  };
-
- /* ================ RETRIEVE ================ */
-const retrieve = async (idProduct : string , id: number) => {
-  return http.get<IMaintenanceData>(`${idProduct}/maintenances/${id}`);
+    console.log(response);
+  } catch (err) {
+    console.log(err);
+    Swal.fire({
+      icon: 'error',
+      title: '¡Error!',
+      text: 'Network Error',
+      confirmButtonText: 'Aceptar'    
+    });
+  }
+};
+/*
+const retrieve = async (id: number) => {
+    return http.get<IExamData>(`/exams/${id}`);
 };
 
- /* ================ UPDATE ================ */
-const update = async (idProduct : string , data: IMaintenanceData) => {
+const update = async (data: IExamData) => {
   try {    
-    const response = await http.put<IMaintenanceData>(`${idProduct}/maintenances/${data.id}`, data);
+    const response = await http.put<IExamData>(`/exams/${data.id}`, data);
     if(response.status === 200){
       Swal.fire({
         icon: 'success',
         title: 'Correcto',
-        text: 'El producto ha sido actualizado',
+        text: 'El examen ha sido actualizado',
         confirmButtonText: 'Aceptar'    
       });
     }
@@ -57,18 +53,18 @@ const update = async (idProduct : string , data: IMaintenanceData) => {
   }
     
 };
- /* ================ DELETE ================ */
-const remove = async (idProduct : string, id: number) => {
+
+const remove = async (id: number) => {
     try {
-      const response = await  http.delete<string>(`${idProduct}/maintenances/${id}`);
+      const response = await  http.delete<string>(`/exams/${id}`);
       if(response.status === 200){
         Swal.fire({
           icon: 'success',
           title: 'Correcto',
-          text: 'El producto ha sido eliminado',
+          text: 'El examen ha sido eliminado',
           confirmButtonText: 'Aceptar'    
         });
-    }
+      }
     } catch (error) {
       Swal.fire({
       icon: 'error',
@@ -77,20 +73,28 @@ const remove = async (idProduct : string, id: number) => {
       confirmButtonText: 'Aceptar'    
     });
     }
-};
 
- /* ================ LIST ================ */ 
- const list = (idProduct : string) => {
-  return http.get<Array<IMaintenanceData>>(`${idProduct}/maintenances`);
 };
 
 
-const maintenanceService = {
+const list = (page: number, size: string, sort? : String) => {
+  const urlRequest : string = "/exams/" + page + "/" + size ;
+  console.log(urlRequest);
+  return http.get<Array<IExamData>>(urlRequest);
+};
+
+const count = async () =>  {  
+  const response = await http.get<number>("/exams/count");
+  return response.data;
+};
+*/
+const MaintenanceService = {
   create,
-  retrieve,
-  update,
-  remove,
-  list,
-  
+  //retrieve,
+  //update,
+  //remove,
+  //list,
+  //count
+
 };
-export default maintenanceService;
+export default MaintenanceService;

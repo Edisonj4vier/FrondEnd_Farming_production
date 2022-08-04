@@ -1,12 +1,11 @@
 import { Routes, Route, Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
+//import "bootstrap/dist/css/bootstrap.min.css";
 import { Home } from "./components/Home";
 import { ProductList } from "./components/product/ProductList";
 import { ProductForm } from "./components/product/ProductForm";
 import { ProductCard } from "./components/product/ProductCard";
-import { MaintenenceLsit } from "./components/maintenence/MaintenenceList";
-import { MaintenenceForm } from "./components/maintenence/MaintenenceForm";
-import { MaintenenceCard } from "./components/maintenence/MaintenenceCard";
+import { MaintenanceForm } from "./components/maintenances/product/MaintenanceForm";
+
 
 const title = "Farming Production";
 const description = "Aplicación web para el control de productos agricolas";
@@ -14,7 +13,7 @@ const description = "Aplicación web para el control de productos agricolas";
 const App: React.FC = () => {
   return (
     <div>
-      <nav className="navbar navbar-expand navbar-dark bg-dark">        
+      <nav className="navbar navbar-expand navbar-dark bg-dark p-4">        
         <Link to={"/"}  className="navbar-brand">
           FARMING
         </Link>
@@ -37,11 +36,11 @@ const App: React.FC = () => {
           <Route path="/products/create" element={<ProductForm />} />    
           <Route path="/products/retrieve/:id" element={<ProductCard/>} />      
           <Route path="/products/update/:id" element={<ProductForm />} />      
+          
+          {/* Maintenances routes */}
+          <Route path="/products/:idProduct/maintenances/create" element={<MaintenanceForm />} />      
 
-          <Route path="/maintenance" element={<MaintenenceLsit />} />          
-          <Route path="/maintenance/create" element={<MaintenenceForm />} />    
-          <Route path="/maintenance/retrieve/:id" element={<MaintenenceCard/>} />      
-          <Route path="/maintenance/update/:id" element={<MaintenenceForm />} />     
+    
         </Routes>
       </div>
     </div>

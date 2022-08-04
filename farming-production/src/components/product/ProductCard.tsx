@@ -26,11 +26,6 @@ export const ProductCard = () => {
     <div>
       {product ? (
         <div>
-          <th>
-            <Link to={"/products/maintenance/create"} className="btn btn-success">
-              <FaPlus /> Agregar
-            </Link>
-          </th>
           <h2>{product.name}</h2>
           <p>{product.description}</p>
           <p>{product.category}</p>
@@ -40,6 +35,11 @@ export const ProductCard = () => {
             <Link to={"/products"} className="btn btn-primary">
               <FaArrowLeft /> Volver
             </Link>
+
+            <Link to={"/products/" + product.id + "/maintenances/create"} className="btn btn-success">
+                    <FaArrowLeft /> Agregar Mantenimientos
+                </Link>
+
             <button type="button" className="btn btn-danger">
               <FaTrash />
               Eliminar

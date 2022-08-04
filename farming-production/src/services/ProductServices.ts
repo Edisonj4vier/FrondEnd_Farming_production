@@ -1,12 +1,12 @@
 import Swal from 'sweetalert2';
 import http from '../http-common';
-import IProductData from '../models/Product';
+import IProductModel from '../models/Product';
 
 
  /* ================ CREATE ================ */
-const create = async (data: IProductData) => {    
+const create = async (data: IProductModel) => {    
     try {
-      const response = await http.post<IProductData>("/products", data);
+      const response = await http.post<IProductModel>("/products", data);
       if(response.status === 201){
         Swal.fire({
           icon: 'success',
@@ -30,13 +30,13 @@ const create = async (data: IProductData) => {
 
  /* ================ RETRIEVE ================ */
 const retrieve = async (id: number) => {
-  return http.get<IProductData>(`/products/${id}`);
+  return http.get<IProductModel>(`/products/${id}`);
 };
 
  /* ================ UPDATE ================ */
-const update = async (data: IProductData) => {
+const update = async (data: IProductModel) => {
   try {    
-    const response = await http.put<IProductData>(`/products/${data.id}`, data);
+    const response = await http.put<IProductModel>(`/products/${data.id}`, data);
     if(response.status === 200){
       Swal.fire({
         icon: 'success',
@@ -79,10 +79,10 @@ const remove = async (id: number) => {
 };
 
  /* ================ LIST ================ */ 
- const list = (page: number, size: number, sort? : String) => {
+ const list = (page: number, size: string, sort? : String) => {
   const urlRequest : string = "/products/" + page + "/" + size ;
-  console.log(urlRequest);
-  return http.get<Array<IProductData>>(urlRequest);
+  //console.log(urlRequest);
+  return http.get<Array<IProductModel>>(urlRequest);
 };
 
 const count = async () =>  {  
