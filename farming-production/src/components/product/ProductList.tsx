@@ -31,24 +31,20 @@ export const ProductList = () => {
 
   //Metodo de filtrado
 
-  const searchName=(terminoBusqueda: any) => {
-    var resultadosBusqueda=products.filter((producto)=>{
-      if(producto.name.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
-      ){
-        return producto;
-      }
-      else{
-        return false ; 
-      }
-    });
-    setProducts(resultadosBusqueda);
+  const obtenerProductos  = () : IProductModel[] => {
+    if (busqueda.length === 0 ) 
+      return products ;
+    const filtro = products.filter (pro =>
+       pro.name.toString().toLowerCase().includes(busqueda.toLowerCase()))
+    
+    return filtro
   }
 
   //Captar busqueda
   const handleChange = (e : any ) => {
     setBusqueda(e.target.value)
-    console.log(e.target.value)
-    searchName(e.target.value)
+    setPageCount(0);
+    //console.log(e.target.value)
   }
 
   const handlePageClick = (event: any) => {
@@ -105,11 +101,11 @@ export const ProductList = () => {
     });
   };
 
-  const options = ["5", "10", "15"];
+  const options = ["5", "10", "15","50"];
 
   return (
     <div className="list row">
-      <h1>Hay {itemsCount} productos</h1> 
+      <h1>Productos existentes {itemsCount}</h1> 
       <hr />
 
 <div>
@@ -147,8 +143,8 @@ export const ProductList = () => {
             </tr>
           </thead>
           <tbody>
-            {products &&
-              products.map((Product, index) => (
+            {obtenerProductos() &&
+              obtenerProductos()?.map((Product, index) => (
                 <tr key={index}>
                   <td>{++index}</td>
                   <td>{Product.name}</td>
