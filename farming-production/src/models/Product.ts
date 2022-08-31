@@ -3,5 +3,6 @@ export default interface IProductModel {
     name : string,
     description : string,
     category : string,
-    amount : number  
+    amount : number , 
+    date :  string , 
 }

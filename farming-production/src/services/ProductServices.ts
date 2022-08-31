@@ -1,92 +1,61 @@
-import Swal from 'sweetalert2';
-import http from '../http-common';
-import IProductModel from '../models/Product';
+import { showAlert, showErrorAlert } from "../common/alerts";
+import http from "../http-common";
+import IProductModel from "../models/Product";
 
-
- /* ================ CREATE ================ */
 const create = async (data: IProductModel) => {    
-    try {
-      const response = await http.post<IProductModel>("/products", data);
-      if(response.status === 201){
-        Swal.fire({
-          icon: 'success',
-          title: 'Correcto',
-          text: 'El producto ha sido creado correctamente',
-          confirmButtonText: 'Aceptar'    
-  
-        });
-      }
-      console.log(response);
-    } catch (err) {
-      console.log(err);
-      Swal.fire({
-        icon: 'error',
-        title: '¡Error!',
-        text: 'Network Error',
-        confirmButtonText: 'Aceptar'    
-      });
-    }
-  };
+  const url : string = `/products`;
+  http.post<IProductModel>(url, data).then((response)=> {
+    console.log(response);
+    showAlert('¡Correcto!', 'Producto agregado correctamente');
+  }).catch((err) => {
+    console.error(err);
+    showErrorAlert('¡Error!', 'El Producto no pudo ser agregado');
+  });  
+};
 
- /* ================ RETRIEVE ================ */
 const retrieve = async (id: number) => {
-  return http.get<IProductModel>(`/products/${id}`);
+    return await http.get<IProductModel>(`/products/${id}`);
 };
 
- /* ================ UPDATE ================ */
 const update = async (data: IProductModel) => {
-  try {    
-    const response = await http.put<IProductModel>(`/products/${data.id}`, data);
-    if(response.status === 200){
-      Swal.fire({
-        icon: 'success',
-        title: 'Correcto',
-        text: 'El producto ha sido actualizado',
-        confirmButtonText: 'Aceptar'    
-      });
-    }
-
-  } catch (error) {
-    Swal.fire({
-      icon: 'error',
-      title: '¡Error!',
-      text: 'Network Error',
-      confirmButtonText: 'Aceptar'    
-    });
-  }
-    
+  const url : string = `/products/${data.id}`;
+  http.put<IProductModel>(url, data,  {headers : {
+    "Authorization" :  `Bearer ${localStorage.getItem('token')}`
+  }}).then((response)=> {
+    console.log(response);
+    showAlert('¡Correcto!', 'Producto actualizado correctamente');
+  }).catch((err) => {
+    console.error(err);
+    showErrorAlert('¡Error!', 'El Producto no pudo ser actualizado');
+  }); 
 };
- /* ================ DELETE ================ */
+
 const remove = async (id: number) => {
-    try {
-      const response = await  http.delete<string>(`/products/${id}`);
-      if(response.status === 200){
-        Swal.fire({
-          icon: 'success',
-          title: 'Correcto',
-          text: 'El producto ha sido eliminado',
-          confirmButtonText: 'Aceptar'    
-        });
-    }
-    } catch (error) {
-      Swal.fire({
-      icon: 'error',
-      title: '¡Error!',
-      text: 'Network Error',
-      confirmButtonText: 'Aceptar'    
-    });
-    }
+  const url : string = `/products/${id}`;
+  http.delete<string>(url ,  {headers : {
+    "Authorization" :  `Bearer ${localStorage.getItem('token')}`
+  }}).then((response)=> {
+    console.log(response);
+    showAlert('¡Correcto!', 'Producto eliminado correctamente');
+  }).catch((err) => {
+    console.error(err);
+    showErrorAlert('¡Error!', 'El Producto no pudo ser eliminado');
+  });
 };
 
- /* ================ LIST ================ */ 
- const list = (page: number, size: string, sort? : String) => {
+
+const list = async (page: number, size: string, sort? : String) => {
   const urlRequest : string = "/products/" + page + "/" + size ;
-  //console.log(urlRequest);
-  return http.get<Array<IProductModel>>(urlRequest);
+  console.log(urlRequest ,  {headers : {
+    "Authorization" :  `Bearer ${localStorage.getItem('token')}`
+  }});
+  return await http.get<Array<IProductModel>>(urlRequest);
 };
 
 const count = async () =>  {  
-  const response = await http.get<number>("/products/count");
+  const response = await http.get<number>("/products/count" ,  {headers : {
+    "Authorization" :  `Bearer ${localStorage.getItem('token')}`
+  }});
   return response.data;
 };
 
@@ -97,6 +66,6 @@ const ProductService = {
   remove,
   list,
   count
-  
+
 };
 export default ProductService;

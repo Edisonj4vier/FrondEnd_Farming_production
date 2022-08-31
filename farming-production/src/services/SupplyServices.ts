@@ -1,66 +1,28 @@
-import Swal from 'sweetalert2';
+import { showAlert, showErrorAlert } from '../common/alerts';
 import http from '../http-common';
-import IMaintenanceData from '../models/Product';
+import IMaintenanceModel from '../models/Maintenance';
 import ISupplyModel from '../models/Supply';
 
 
  /* ================ CREATE ================ */
-const create = async (idProduct : string, idMaintenance : string, data: ISupplyModel) => {    
-    try {
-      const response = await http.post<IMaintenanceData>(`${idProduct}/${idMaintenance}/supplies`, data);
-      if(response.status === 201){
-        Swal.fire({
-          icon: 'success',
-          title: 'Correcto',
-          text: 'El producto ha sido creado correctamente',
-          confirmButtonText: 'Aceptar'    
-  
-        });
-      }
+const create = async (dataMaintenance :  IMaintenanceModel,  dataSupply :  ISupplyModel) => {    
+  //console.log(data);
+    const url : string = `/products/${dataMaintenance.product!.id}/maintenances/${dataSupply.maintenance!.id}/supplies`;
+    http.post<ISupplyModel>(url,  {headers : {
+      "Authorization" :  `Bearer ${localStorage.getItem('token')}`
+    }}).then((response)=> {
       console.log(response);
-    } catch (err) {
-      console.log(err);
-      Swal.fire({
-        icon: 'error',
-        title: '¡Error!',
-        text: 'Network Error',
-        confirmButtonText: 'Aceptar'    
-      });
-    }
-  };
-
- /* ================ DELETE ================ */
-const remove = async (idProduct : string , idMaintenance : string , id: number) => {
-    try {
-      const response = await  http.delete<string>(`${idProduct}/${idMaintenance}/supplies/${id}`);
-      if(response.status === 200){
-        Swal.fire({
-          icon: 'success',
-          title: 'Correcto',
-          text: 'El producto ha sido eliminado',
-          confirmButtonText: 'Aceptar'    
-        });
-    }
-    } catch (error) {
-      Swal.fire({
-      icon: 'error',
-      title: '¡Error!',
-      text: 'Network Error',
-      confirmButtonText: 'Aceptar'    
+      showAlert('¡Correcto!', 'Mantenimiento agregado correctamente');
+    }).catch((err) => {
+      console.error(err);
+      showErrorAlert('¡Error!', 'El mantenimiento no pudo ser agregado');
     });
-    }
-};
-
- /* ================ LIST ================ */ 
- const list = (idProduct : string , idMaintenance : string ) => {
-  return http.get<Array<IMaintenanceData>>(`${idProduct}/${idMaintenance}/supplies`);
 };
 
 
-const supplyService = {
+const SupplyService = {
   create,
-  remove,
-  list,
+
   
 };
-export default supplyService;
+export default SupplyService;
