@@ -1,103 +1,114 @@
 import { useEffect, useState } from "react";
-import {  FaEye, FaPen, FaPlus, FaTrash } from "react-icons/fa";
+import { FaEye, FaPen, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import IMaintenanceModel from "../../models/Maintenance";
-import MaintenanceService from "../../services/MaintenanceServices";
 import { showAlert, showErrorAlert } from "../../common/alerts";
+import ISupplyModel from "../../models/Supply";
+import SupplyService from "../../services/SupplyServices";
 
 type AppProps = {
-    idProduct : number;
-  }
+  idProduct: number;
+};
 
 export const SupplyList = (props: AppProps) => {
+  const [supplies, setSupplies] = useState<Array<ISupplyModel>>([]);
 
-    const [maintenances, setMaintenances] = useState<Array<IMaintenanceModel>>([]);
+  useEffect(() => {
+    SupplyService.list(props.idProduct)
+      .then((response: any) => {
+        setSupplies(response.data); //Víncula el resultado del servicio con la función del Hook useState
+        console.log(response.data);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  }, [props.idProduct]);
 
-
-    useEffect(() => {
-          MaintenanceService.list(props.idProduct)
+  const removeSupply = (id: number, idProduct: number) => {
+    Swal.fire({
+      title: "¿Desea eliminar el insumo?",
+      showDenyButton: true,
+      confirmButtonText: "Si",
+      denyButtonText: "No",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        SupplyService.remove(idProduct, id)
           .then((response: any) => {
-            setMaintenances(response.data); //Víncula el resultado del servicio con la función del Hook useState
-            console.log(response.data);
+            showAlert("¡Correcto!", "Insumo eliminado correctamente");
+            window.location.reload();
           })
           .catch((e: Error) => {
+            showErrorAlert("¡Error!", "Error al intentar borrar");
             console.log(e);
           });
-          
-      } , [props.idProduct]);   
+      }
+    });
+  };
 
+  return (
+    <div className="list row">
+      <h4>Insumos</h4>
+      <div className="col-md-12">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Cantidad</th>
 
-       const removeMaintenance = (  id : number, idProduct : number) => {
-        Swal.fire({
-            title: '¿Desea eliminar el mantenimiento?',
-            showDenyButton: true,
-            confirmButtonText: 'Si',
-            denyButtonText: 'No',
-          }).then((result) => {            
-            if (result.isConfirmed) {
-              MaintenanceService.remove(idProduct , id)
-              .then((response: any) => {              
-                showAlert('¡Correcto!', 'Mantenimiento eliminado correctamente');
-              })
-              .catch((e: Error) => {
-                showErrorAlert('¡Error!', 'Error al intentar borrar');
-                console.log(e);
-              });      
-            }
-          });        
-     }; 
+              <th>Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {supplies &&
+              supplies.map((Supply, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{Supply.name}</td>
+                  <td>{Supply.description}</td>
+                  <td>{Supply.amount}</td>
 
-    return ( 
-        <div className='list row'>
-            <h4>Mantenimientos</h4>
-            <div className='col-md-12'>
-                <table className='table'>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Título</th>
-                            <th>Descripción</th>
-                            <th>
-                            <Link to={"/products/" + props.idProduct + "/maintenances/create"} className="btn btn-success">
-                                <FaPlus /> Agregar
-                            </Link>                             
-                            </th>
-                            <th>  
-                            </th>                          
-                        </tr>
-                    </thead>
-                    <tbody> 
-                        { maintenances && maintenances.map((Maintenance, index) => (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>{Maintenance.name}</td>
-                                <td>{Maintenance.description}</td>
-                                <td>
-                                <div className="btn-group" role="group">
-                                <Link to={"/products/" + props.idProduct + "/maintenances/retrieve/" + Maintenance.id} className="btn btn-warning">
-                                    <FaEye /> Ver
-                                  </Link>                                  
-                                  <Link to={"/products/" + props.idProduct + "/maintenances/update/" + Maintenance.id} className="btn btn-primary">
-                                      <FaPen /> Editar
-                                  </Link>
+                  <td>
+                    <div className="btn-group" role="group">
+                      <Link
+                        to={
+                          "/products/" +
+                          props.idProduct +
+                          "/supplies/retrieve/" +
+                          Supply.id
+                        }
+                        className="btn btn-warning"
+                      >
+                        <FaEye /> Ver
+                      </Link>
+                      <Link
+                        to={
+                          "/products/" +
+                          props.idProduct +
+                          "/supplies/update/" +
+                          Supply.id
+                        }
+                        className="btn btn-primary"
+                      >
+                        <FaPen /> Editar
+                      </Link>
 
-                                  <button className="btn btn-danger" onClick={()=> removeMaintenance(Maintenance.id! ,  props.idProduct)}>
-                                    <FaTrash /> Eliminar
-                                  </button>
-
-                                  
-                                </div>                        
-
-                                </td>
-                            </tr>
-                        ))}             
-                    </tbody>
-                </table>
-
-                
-            </div>            
-        </div>
-     );
-
-}
+                      <button
+                        className="btn btn-danger"
+                        onClick={() =>
+                          removeSupply(Supply.id!, props.idProduct)
+                        }
+                      >
+                        <FaTrash /> Eliminar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};

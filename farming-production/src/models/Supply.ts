@@ -1,10 +1,9 @@
-import IMaintenanceModel from "./Maintenance";
+import IProductModel from "./Product";
 
 export default interface ISupplyModel {
     id?: number | null,
      name : string ,
      description : string ,
      amount : string ,
-     expericionDate : string , 
-     maintenance : null | IMaintenanceModel;  
+     product : null | IProductModel;  
 }

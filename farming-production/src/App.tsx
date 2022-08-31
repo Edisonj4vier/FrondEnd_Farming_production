@@ -8,8 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { MaintenanceForm } from "./components/maintenances/MaintenanceForm";
 import { MaintenanceCard } from "./components/maintenances/MaintenanceCard";
 import { UserLogin } from "./components/user/UserLogin";
-/* import { SupplyForm } from "./components/supplies/SupplyForm";
-import { SupplyCard } from "./components/supplies/SupplyCard"; */
+import { SupplyForm } from "./components/supplies/SupplyForm";
+import { SupplyCard } from "./components/supplies/SupplyCard";
+
 
 const title = "Farming Production";
 const description = "Aplicación web para el control de productos agricolas";
@@ -78,9 +79,18 @@ const App: React.FC = () => {
             element={<MaintenanceForm />}
           />
           {/* Suplies routes */}
-          {/*           <Route path="/products/:idProduct/maintenances/:idMaintenance/create" element={<SupplyForm />} />      
-          <Route path="/products/:idProduct/maintenances/:idMaintenance/retrieve/:id" element={<SupplyCard />} />      
-          <Route path="/products/:idProduct/maintenances/:idMaintenance/update/:id" element={<SupplyForm />} />    */}
+          <Route
+            path="/products/:idProduct/supplies/create"
+            element={<SupplyForm />}
+          />
+           <Route
+            path="/products/:idProduct/supplies/retrieve/:id"
+            element={<SupplyCard />}
+          />
+          <Route
+            path="/products/:idProduct/supplies/update/:id"
+            element={<SupplyForm />}
+          /> 
         </Routes>
       </div>
     </div>

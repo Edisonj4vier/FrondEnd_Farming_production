@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
-import IMaintenanceModel from "../../models/Maintenance";
 import IProductModel from "../../models/Product";
-import MaintenanceService from "../../services/MaintenanceServices";
+import ISupplyModel from "../../models/Supply";
 import ProductService from "../../services/ProductServices";
+import SupplyService from "../../services/SupplyServices";
+
+
 
 export const SupplyCard = () => {
   const { id, idProduct } = useParams();
 
   //Hooks para gestionar el modelo
-  const [maintenance, setMaintenance] = useState<IMaintenanceModel>();
+  const [supply, setSupply] = useState<ISupplyModel>();
   const [product, setProduct] = useState<IProductModel>();
 
   useEffect(() => {
@@ -18,7 +20,7 @@ export const SupplyCard = () => {
       ProductService.retrieve(+idProduct)
         .then((response: any) => {
           setProduct(response.data); //Víncula el resultado del servicio con la función del Hook useState
-          maintenance!.product = product!;
+          supply!.product = product!;
           //console.log(response.data);
         })
         .catch((e: Error) => {
@@ -27,25 +29,25 @@ export const SupplyCard = () => {
     }
 
     if (id && idProduct) {
-      MaintenanceService.retrieve(+idProduct, +id)
+      SupplyService.retrieve(+idProduct, +id)
         .then((response: any) => {
-          setMaintenance(response.data); //Víncula el resultado del servicio con la función del Hook useState
-          maintenance!.product = product!;
+          setSupply(response.data); //Víncula el resultado del servicio con la función del Hook useState
+          supply!.product = product!;
           //console.log(response.data);
         })
         .catch((e: Error) => {
           console.log(e);
         });
     }
-  }, [product, maintenance, id, idProduct]);
+  }, [product, supply, id, idProduct]);
 
   return (
     <div>
-      {/* {maintenance ? (
+      {supply ? (
         <div>
-          <h2>{maintenance.name}</h2>
-          <p>{maintenance.description}</p>
-          <p>{maintenance.date}</p>
+          <h2>{supply.name}</h2>
+          <p>{supply.description}</p>
+          <p>{supply.amount}</p>
           <br />
           <div className="btn-group" role="group">
             <Link
@@ -54,12 +56,17 @@ export const SupplyCard = () => {
             >
               <FaArrowLeft /> Volver
             </Link>
+
+            <Link to={"/products/" + idProduct + "/supplies/"+id +"/create"} className="btn btn-success">
+                    <FaArrowLeft /> Agregar Insumos
+                </Link>
+
           </div>
         </div>
       ) : (
-        <h1>No hay una mantenimiento activo</h1>
+        <h1>No hay un insumo activo</h1>
         
-      )} */}
+      )}
     </div>
   );
 };
